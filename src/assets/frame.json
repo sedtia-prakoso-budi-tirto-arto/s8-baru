@@ -1,0 +1,30 @@
+[
+  {
+    "shape": "rect",
+    "coords": [154, 68, 581, 715],
+    "href": "",
+    "alt": "Area 1",
+    "title": "Area 1"
+  },
+  {
+    "shape": "rect",
+    "coords": [1049, 714, 621, 69],
+    "href": "",
+    "alt": "Area 2",
+    "title": "Area 2"
+  },
+  {
+    "shape": "rect",
+    "coords": [584, 1396, 158, 751],
+    "href": "",
+    "alt": "Area 3",
+    "title": "Area 3"
+  },
+  {
+    "shape": "rect",
+    "coords": [1050, 1396, 620, 749],
+    "href": "",
+    "alt": "Area 4",
+    "title": "Area 4"
+  }
+]
