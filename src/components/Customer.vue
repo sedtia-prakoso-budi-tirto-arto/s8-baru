@@ -1236,6 +1236,19 @@ watch(
 
 const handleAccept = (acceptCallback) => {
   if (ratingValue.value > 0 || ratingFG.value > 0) {
+    // Validasi kalau rating < 5 wajib isi feedback
+    if (ratingValue.value < 5 && !feedback.value.trim()) {
+      toast.add({
+        severity: "warn",
+        summary: "Feedback Wajib",
+        detail:
+          "Jika memberi rating di bawah 5, isi kritik & saran terlebih dahulu.",
+        group: "tr",
+        life: 3000,
+      });
+      return;
+    }
+
     // Tampilkan dialog konfirmasi
     confirmCallback.value = () => {
       // Proses menyimpan komentar dan rating setelah konfirmasi
@@ -1364,6 +1377,17 @@ const handleAccept = (acceptCallback) => {
 
 const handleAcceptEditor = (acceptCallback) => {
   if (ratingEditorValue.value > 0) {
+    if (ratingEditorValue.value < 5 && !feedbackEditor.value.trim()) {
+      toast.add({
+        severity: "warn",
+        summary: "Feedback Wajib",
+        detail:
+          "Jika memberi rating di bawah 5, isi kritik & saran terlebih dahulu.",
+        life: 3000,
+      });
+      return;
+    }
+
     // Proses untuk menyimpan rating editor
     const ratingRef = dbRef(db, `${lokasi}/orders/${orderId.value}/`);
     update(ratingRef, {
@@ -1440,6 +1464,16 @@ const handleCSSubmit = (acceptCallback) => {
 
 const handleCSAccept = (acceptCallback) => {
   if (ratingCSValue.value > 0) {
+    if (ratingCSValue.value < 5 && !feedbackCS.value.trim()) {
+      toast.add({
+        severity: "warn",
+        summary: "Feedback Wajib",
+        detail: "Jika memberi rating di bawah 5, isi feedback terlebih dahulu.",
+        life: 3000,
+      });
+      return;
+    }
+
     // Panggil handleCSSubmit untuk menyimpan rating dan feedback CS
     handleCSSubmit(acceptCallback);
   } else {

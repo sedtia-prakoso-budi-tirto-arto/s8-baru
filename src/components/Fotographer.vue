@@ -608,14 +608,23 @@
         </template>
       </Column>
 
+      <!-- Rating FG Column -->
       <Column
         header="Rating FG"
         field="ratingFG"
-        style="min-width: 8rem"
+        style="min-width: 12rem"
         :sortable="true"
       >
         <template #body="{ data }">
-          <span v-html="renderStars(data.ratingFG)" class="ml-1"></span>
+          <div>
+            <span v-html="renderStars(data.ratingFG)" class="ml-1"></span>
+            <p
+              v-if="data.feedbackFG"
+              class="text-sm text-gray-500 mt-1 whitespace-pre-line break-words max-w-[200px]"
+            >
+              {{ data.feedbackFG }}
+            </p>
+          </div>
         </template>
       </Column>
 
@@ -623,23 +632,39 @@
       <Column
         header="Rating CS"
         field="ratingCS"
-        style="min-width: 8rem"
+        style="min-width: 12rem"
         :sortable="true"
       >
         <template #body="{ data }">
-          <span v-html="renderStars(data.ratingCS)" class="ml-1"></span>
+          <div>
+            <span v-html="renderStars(data.ratingCS)" class="ml-1"></span>
+            <p
+              v-if="data.feedbackCS"
+              class="text-sm text-gray-500 mt-1 whitespace-pre-line break-words max-w-[200px]"
+            >
+              {{ data.feedbackCS }}
+            </p>
+          </div>
         </template>
       </Column>
 
-      <!-- Rating CS Column -->
+      <!-- Rating Editor Column -->
       <Column
         header="Rating Editor"
         field="ratingEditor"
-        style="min-width: 8rem"
+        style="min-width: 12rem"
         :sortable="true"
       >
         <template #body="{ data }">
-          <span v-html="renderStars(data.ratingEditor)" class="ml-1"></span>
+          <div>
+            <span v-html="renderStars(data.ratingEditor)" class="ml-1"></span>
+            <p
+              v-if="data.feedbackEditor"
+              class="text-sm text-gray-500 mt-1 whitespace-pre-line break-words max-w-[200px]"
+            >
+              {{ data.feedbackEditor }}
+            </p>
+          </div>
         </template>
       </Column>
     </DataTable>
@@ -1689,8 +1714,11 @@ const reloadData = () => {
                 "Belum order editor",
               cs: orderData.cs || "Belum tuntas",
               ratingFG: orderData.ratingFG || 0,
+              feedbackFG: orderData.feedbackFG || "",
               ratingCS: orderData.ratingCS || 0,
+              feedbackCS: orderData.feedbackCS || "",
               ratingEditor: orderData.ratingEditor || 0,
+              feedbackEditor: orderData.feedbackEditor || "",
               kode: orderData.kode || "N/A",
               pilFoto: orderData.pilFoto || "N/A",
               comments: Array.isArray(orderData.comments)
@@ -1760,8 +1788,11 @@ const reloadData = () => {
               "Belum order editor",
             cs: orderData.cs || "Belum tuntas",
             ratingFG: orderData.ratingFG || 0,
+            feedbackFG: orderData.feedbackFG || "",
             ratingCS: orderData.ratingCS || 0,
+            feedbackCS: orderData.feedbackCS || "",
             ratingEditor: orderData.ratingEditor || 0,
+            feedbackEditor: orderData.feedbackEditor || "",
             kode: orderData.kode || "N/A",
             pilFoto: orderData.pilFoto || "N/A",
             comments: Array.isArray(orderData.comments)
