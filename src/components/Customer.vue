@@ -132,7 +132,7 @@
         <div
           v-for="(image, index) in galleryToShow"
           :key="index"
-          class="relative group bg-gray-100 rounded-lg mb-3"
+          class="relative group bg-gray-100 rounded-lg mb-3 break-inside-avoid"
         >
           <!-- Wrapper for Image and Filename -->
           <div class="flex flex-col items-center">
@@ -157,9 +157,28 @@
             </div>
           </div>
 
-          <!-- Display filename below image -->
-          <div class="text-center text-sm text-gray-500 py-1">
-            {{ decodeURIComponent(image.url.split("%2F").pop().split("?")[0]) }}
+          <!-- Display filename & download button in one line -->
+          <div
+            class="flex items-center justify-between text-sm text-gray-500 px-2 py-2"
+          >
+            <span class="truncate">
+              {{
+                decodeURIComponent(image.url.split("%2F").pop().split("?")[0])
+              }}
+            </span>
+
+            <Button
+              icon="pi pi-download"
+              size="small"
+              variant="text"
+              class="ml-2"
+              @click="
+                downloadImage(
+                  image.url,
+                  decodeURIComponent(image.url.split('%2F').pop().split('?')[0])
+                )
+              "
+            />
           </div>
 
           <!-- Add checkbox for selecting images -->
@@ -1558,7 +1577,7 @@ const loadGallery = async (orderId) => {
   const storage = getStorage(); // Initialize Firebase Storage
 
   try {
-    const folderPath = `${lokasi}/${orderId}/THUMB`;
+    const folderPath = `${lokasi}/${orderId}`;
     const editFolderPath = `${lokasi}/${orderId}_edit`;
 
     const folderRef = storageRef(storage, folderPath);
