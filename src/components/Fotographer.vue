@@ -915,95 +915,75 @@
     v-model:visible="showDataDialog"
     header="Editor Data"
     modal
-    :style="{ width: '95vw' }"
+    :style="{ width: '90vw' }"
     class="p-4"
-    stripedRows
   >
-    <DataTable :value="editorTasks" class="p-datatable-gridlines">
+    <DataTable :value="editorTasks" class="p-datatable-sm shadow-md rounded-lg">
+      <!-- Kolom Utama -->
       <Column
         field="editor"
         header="Editor"
-        class="text-gray-800 font-semibold"
+        class="text-gray-900 font-semibold"
       />
       <Column field="pendingTasks" header="Total" class="text-gray-600" />
 
-      <Column header="On Progress">
+      <!-- Tabel Detail -->
+      <Column header="Daftar Tugas">
         <template #body="slotProps">
-          <div
-            v-for="(task, index) in slotProps.data.details"
-            :key="index"
-            class="mt-2"
-          >
-            <Checkbox
-              v-model="task.onProgress"
-              :binary="true"
-              @change="toggleOnProgress(task)"
-            />
-          </div>
-        </template>
-      </Column>
+          <div class="divide-y divide-gray-200">
+            <div
+              v-for="(task, index) in slotProps.data.details"
+              :key="index"
+              class="grid grid-cols-5 items-center gap-4 py-3 px-2 hover:bg-gray-50 rounded-md transition"
+              :class="{ 'bg-yellow-50': task.onProgress }"
+            >
+              <!-- On Progress -->
+              <div class="flex items-center space-x-2">
+                <Checkbox
+                  v-model="task.onProgress"
+                  :binary="true"
+                  @change="toggleOnProgress(task)"
+                />
+                <span class="text-sm text-gray-700">Progress</span>
+              </div>
 
-      <Column header="Customer">
-        <template #body="slotProps">
-          <div
-            v-for="(task, index) in slotProps.data.details"
-            :key="index"
-            class="mt-2"
-            :class="{ 'highlight-task': task.onProgress }"
-          >
-            {{ task.orderId }}
-          </div>
-        </template>
-      </Column>
+              <!-- Customer -->
+              <div class="text-sm font-medium text-gray-800">
+                {{ task.orderId }}
+              </div>
 
-      <Column header="Paket">
-        <template #body="slotProps">
-          <div
-            v-for="(task, index) in slotProps.data.details"
-            :key="index"
-            class="mt-2"
-            :class="{ 'highlight-task': task.onProgress }"
-          >
-            {{ task.paket }}
-          </div>
-        </template>
-      </Column>
+              <!-- Paket -->
+              <div class="text-sm text-gray-600">
+                {{ task.paket }}
+              </div>
 
-      <Column header="Nama File">
-        <template #body="slotProps">
-          <div
-            v-for="(task, index) in slotProps.data.details"
-            :key="index"
-            class="mt-2"
-            :class="{ 'highlight-task': task.onProgress }"
-          >
-            {{
-              Array.isArray(task.filename)
-                ? task.filename.join(", ").replace(/[\[\]"]+/g, "")
-                : task.filename
-            }}
-          </div>
-        </template>
-      </Column>
+              <!-- Nama File -->
+              <div class="text-sm truncate max-w-xs text-gray-700">
+                {{
+                  Array.isArray(task.filename)
+                    ? task.filename.join(", ").replace(/[\[\]"]+/g, "")
+                    : task.filename
+                }}
+              </div>
 
-      <Column header="Deadline">
-        <template #body="slotProps">
-          <div
-            v-for="(task, index) in slotProps.data.details"
-            :key="index"
-            class="mt-1"
-          >
-            <Tag
-              v-if="isCS === false"
-              :value="task.deadline"
-              :severity="getTagSeverity(task.deadline)"
-            />
-            <DatePicker
-              v-else
-              dateFormat="dd/mm/yy"
-              v-model="task.deadline"
-              @blur="updateDeadline(task.orderId, task.deadline)"
-            />
+              <!-- Deadline -->
+              <div class="flex items-center">
+                <Tag
+                  v-if="!isCS"
+                  :value="task.deadline"
+                  :severity="getTagSeverity(task.deadline)"
+                  class="text-xs px-2 py-1"
+                />
+                <DatePicker
+                  v-else
+                  showIcon
+                  fluid
+                  dateFormat="dd/mm/yy"
+                  v-model="task.deadline"
+                  @blur="updateDeadline(task.orderId, task.deadline)"
+                />
+              </div>
+            </div>
           </div>
         </template>
       </Column>
