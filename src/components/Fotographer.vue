@@ -1934,15 +1934,12 @@ const reloadData = () => {
         // Setelah semua tugas ditambahkan, urutkan berdasarkan deadline yang paling dekat untuk setiap editor
         Object.keys(editorCounts).forEach((editorName) => {
           editorCounts[editorName].sort((a, b) => {
-            // Convert the deadline into Date objects for comparison
-            const deadlineA = new Date(a.deadline);
-            const deadlineB = new Date(b.deadline);
+            const deadlineA = parseDeadline(a.deadline);
+            const deadlineB = parseDeadline(b.deadline);
 
-            // If deadline is invalid (e.g. "No Deadline"), we can treat it as an infinite deadline
-            if (isNaN(deadlineA)) return 1; // Move tasks with invalid deadline to the end
-            if (isNaN(deadlineB)) return -1; // Move tasks with invalid deadline to the end
+            if (!deadlineA) return 1;
+            if (!deadlineB) return -1;
 
-            // Compare the deadlines
             return deadlineA - deadlineB;
           });
         });
@@ -1966,9 +1963,20 @@ const reloadData = () => {
         ([editor, tasks]) => ({
           editor: editor,
           pendingTasks: tasks.length,
-          details: tasks,
+          details: tasks, // sudah terurut per editor
         })
       );
+
+      // Urutkan seluruh editor berdasarkan deadline tugas terdekat mereka
+      editorTasks.value.sort((a, b) => {
+        const deadlineA = parseDeadline(a.details[0]?.deadline);
+        const deadlineB = parseDeadline(b.details[0]?.deadline);
+
+        if (!deadlineA) return 1;
+        if (!deadlineB) return -1;
+
+        return deadlineA - deadlineB;
+      });
 
       // Tampilkan hasil hitungan editor
       console.log(editorTasks.value); // Hasil perhitungan jumlah editor yang belum memiliki hasilEdit
@@ -2008,6 +2016,12 @@ const getPriority = (status) => {
 //   const [hours, minutes, seconds] = timePart.split(".").map(Number);
 //   return new Date(year, month - 1, day, hours, minutes, seconds); // Date(year, monthIndex, day, hour, minute, second)
 // };
+
+function parseDeadline(dateStr) {
+  if (!dateStr || dateStr === "No Deadline") return null;
+  const [day, month, year] = dateStr.split("/");
+  return new Date(`${year}-${month}-${day}`); // jadi YYYY-MM-DD
+}
 
 // Properti computed untuk sorting data berdasarkan prioritas dan timestamp
 const sortedOrders = computed(() => {
