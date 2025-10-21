@@ -2018,9 +2018,26 @@ const getPriority = (status) => {
 // };
 
 function parseDeadline(dateStr) {
-  if (!dateStr || dateStr === "No Deadline") return null;
-  const [day, month, year] = dateStr.split("/");
-  return new Date(`${year}-${month}-${day}`); // jadi YYYY-MM-DD
+  // Jika kosong, bukan string, atau bukan format tanggal yang valid
+  if (
+    !dateStr ||
+    typeof dateStr !== "string" ||
+    dateStr === "No Deadline" ||
+    !dateStr.includes("/")
+  ) {
+    return null;
+  }
+
+  const parts = dateStr.split("/");
+  if (parts.length !== 3) return null;
+
+  const [day, month, year] = parts.map((p) => p.toString().padStart(2, "0"));
+  const parsedDate = new Date(`${year}-${month}-${day}`);
+
+  // Jika hasil parsing invalid (NaN)
+  if (isNaN(parsedDate.getTime())) return null;
+
+  return parsedDate;
 }
 
 // Properti computed untuk sorting data berdasarkan prioritas dan timestamp
