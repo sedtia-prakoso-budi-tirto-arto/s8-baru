@@ -800,6 +800,16 @@ const loadSavedSelections = async () => {
       `${lokasi}/orders/${orderId.value}/hasilEdit`
     );
 
+    const feedbackFgRef = dbRef(
+      db,
+      `${lokasi}/orders/${orderId.value}/feedbackFG`
+    );
+    const [ratingFgSnapshot, feedbackFgSnapshot] = await Promise.all([
+      get(ratingFgRef),
+      get(feedbackFgRef),
+    ]);
+    feedback.value = feedbackFgSnapshot.val() || "";
+
     // Ambil data dari Firebase
     const [
       pilPaketSnapshot,
@@ -814,7 +824,6 @@ const loadSavedSelections = async () => {
       get(pilPaketRef),
       get(pilFotoRef),
       get(pilBgRef),
-      get(ratingFgRef),
       get(totalFotoRef),
       get(deadlineRef),
       get(statusRef),
@@ -1235,9 +1244,21 @@ watch(
 );
 
 const handleAccept = (acceptCallback) => {
+  // Ambil feedback terbaru dari Firebase jika belum ada di state
+  let existingFeedback = feedback.value?.trim() || "";
+  if (!existingFeedback) {
+    const feedbackRef = dbRef(
+      db,
+      `${lokasi}/orders/${orderId.value}/feedbackFG`
+    );
+    const feedbackSnap = get(feedbackRef);
+    existingFeedback = feedbackSnap.val()?.trim() || "";
+  }
+
   if (ratingValue.value > 0 || ratingFG.value > 0) {
-    // Validasi kalau rating < 5 wajib isi feedback
-    if (ratingValue.value < 5 && !feedback.value.trim()) {
+    const currentRating = ratingValue.value || ratingFG.value;
+
+    if (currentRating < 5 && !existingFeedback) {
       toast.add({
         severity: "warn",
         summary: "Feedback Wajib",
