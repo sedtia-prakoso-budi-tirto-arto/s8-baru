@@ -1244,7 +1244,7 @@ watch(
   { deep: true }
 );
 
-const handleAccept = (acceptCallback) => {
+const handleAccept = async (acceptCallback) => {
   // Ambil feedback terbaru dari Firebase jika belum ada di state
   let existingFeedback = feedback.value?.trim() || "";
   if (!existingFeedback) {
@@ -1252,8 +1252,10 @@ const handleAccept = (acceptCallback) => {
       db,
       `${lokasi}/orders/${orderId.value}/feedbackFG`
     );
-    const feedbackSnap = get(feedbackRef);
-    existingFeedback = feedbackSnap.val()?.trim() || "";
+    const feedbackSnap = await get(feedbackRef); // ✅ await here
+    existingFeedback = feedbackSnap.exists()
+      ? feedbackSnap.val()?.trim() || ""
+      : "";
   }
 
   if (ratingValue.value > 0 || ratingFG.value > 0) {
