@@ -804,8 +804,11 @@ const loadSavedSelections = async () => {
       db,
       `${lokasi}/orders/${orderId.value}/feedbackFG`
     );
-    const feedbackFgSnapshot = await Promise.all(get(feedbackFgRef));
-    feedback.value = feedbackFgSnapshot.val() || "";
+
+    const feedbackFgSnapshot = await get(feedbackFgRef);
+    feedback.value = feedbackFgSnapshot.exists()
+      ? feedbackFgSnapshot.val()
+      : "";
 
     // Ambil data dari Firebase
     const [
@@ -1783,6 +1786,10 @@ onMounted(async () => {
       }
     });
   }
+
+  watch(pilFoto, (val) => {
+    console.log("Nilai pilFoto:", val, typeof val);
+  });
 });
 
 // Handle login
