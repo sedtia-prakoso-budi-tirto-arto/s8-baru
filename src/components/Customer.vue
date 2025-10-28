@@ -804,10 +804,7 @@ const loadSavedSelections = async () => {
       db,
       `${lokasi}/orders/${orderId.value}/feedbackFG`
     );
-    const [ratingFgSnapshot, feedbackFgSnapshot] = await Promise.all([
-      get(ratingFgRef),
-      get(feedbackFgRef),
-    ]);
+    const feedbackFgSnapshot = await Promise.all(get(feedbackFgRef));
     feedback.value = feedbackFgSnapshot.val() || "";
 
     // Ambil data dari Firebase

@@ -1881,6 +1881,7 @@ const reloadData = () => {
                   paket: orderData.services?.[0]?.name || "No Paket",
                   deadline: orderData.deadline || "No Deadline",
                   onProgress: pil.onProgress || false, // << tambahan
+                  status: orderData.status || "Unknown",
                 });
               }
             }
@@ -1926,6 +1927,7 @@ const reloadData = () => {
                 paket: orderData.services?.[0]?.name || "No Paket",
                 deadline: orderData.deadline || "No Deadline",
                 onProgress: fileOnProgress, // ✅ ikut disimpan
+                status: orderData.status || "Unknown",
               });
             }
           });
@@ -1962,8 +1964,12 @@ const reloadData = () => {
       editorTasks.value = Object.entries(editorCounts).map(
         ([editor, tasks]) => ({
           editor: editor,
-          pendingTasks: tasks.length,
-          details: tasks, // sudah terurut per editor
+          pendingTasks: tasks.filter(
+            (t) => t.status !== "selesai edit" && t.status !== "done"
+          ).length,
+          details: tasks.filter(
+            (t) => t.status !== "selesai edit" && t.status !== "done"
+          ),
         })
       );
 
