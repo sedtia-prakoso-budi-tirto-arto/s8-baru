@@ -825,6 +825,7 @@ const loadSavedSelections = async () => {
       get(pilFotoRef),
       get(pilBgRef),
       get(totalFotoRef),
+      get(ratingFgRef),
       get(deadlineRef),
       get(statusRef),
       get(hasilEditRef),
